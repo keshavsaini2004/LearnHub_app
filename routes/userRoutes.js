@@ -45,6 +45,8 @@ router.post("/signup", async (req,res) =>{
     }
   });
 
+  
+
   router.post("/login",async(req,res)=>{
     try{
          // Extract email  and password from request body
@@ -93,5 +95,8 @@ router.post("/signup", async (req,res) =>{
   router.get('/verify', jwtAuthMiddleware, (req, res) => {
     res.status(200).json({ message: 'Token is valid', user: req.user });
 });
+
+//comment added for testing purpose for git hub
+
 
   module.exports = router;
