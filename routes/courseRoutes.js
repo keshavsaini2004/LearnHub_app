@@ -7,7 +7,7 @@ const { setValue, getValue } = require('../redisClient');
 
 
 // Create a new course 
-router.post('/api/courses',async(req,res) =>{
+router.post('/api/courses',jwtAuthMiddleware,async(req,res) =>{
   try{
     const data = req.body;
     const newCourse = new Course(data);
@@ -15,24 +15,23 @@ router.post('/api/courses',async(req,res) =>{
 
     console.log("Course saved successfully");
 
-    const payload = {
-        id: response.id,
-    }
-        console.log(JSON.stringify(payload));
-        const token = generateToken(response.id);
+    // const payload = {
+    //     id: response.id,
+    // }
+    //     console.log(JSON.stringify(payload));
+    //     const token = generateToken(response.id);
 
         const redisData = { 
             ...response._doc,
-            token
+            // token
         };
         await setValue(`user:${response.id}`, redisData);
 
-    console.log("Token is :",token );
+    // console.log("Token is :",token );
         res.status(200).json({
         status: 200,
         message: "Course saved successfully",
         data: response,
-        token: token
         })
   }catch(err){
     console.error("Error saving data:", err);
