@@ -21,9 +21,13 @@ app.use(logRequest);
 
  //Import the router files
 const userRoutes = require('./routes/userRoutes');
+const courseRoutes = require('./routes/courseRoutes');
+const topicRoutes = require('./routes/topicRoutes');
 
 //Use the router files
 app.use('/user',userRoutes);
+app.use('/course',courseRoutes);
+app.use('/topic',topicRoutes);  
 
 app.listen(3000, ()=>{
     console.log('Server is running on port 3000');

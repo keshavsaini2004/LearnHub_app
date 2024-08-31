@@ -8,8 +8,8 @@ const jwtAuthMiddleware = (req, res, next) => {
   if (!token) return res.status(401).json({ error: 'Unauthorized' });
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded;
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);//verify the jwt token
+    req.user = decoded;//attach the user information to the request object
     next();
   } catch (err) {
     console.error(err);
@@ -17,9 +17,10 @@ const jwtAuthMiddleware = (req, res, next) => {
   }
 };
 
+//function to generate a token 
 const generateToken = (userData) => {
   const payload = { ...userData };
-  return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '30s' });
+  return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '30m' });
 };
 
 module.exports = { jwtAuthMiddleware, generateToken };

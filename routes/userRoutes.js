@@ -17,12 +17,12 @@ router.post("/signup", async (req,res) =>{
 
       const payload = {
         id: response.id,
-        email: response.email,
+        email: response.email,  
       };
       console.log(JSON.stringify(payload));
       const token = generateToken(response.email);
 
-      const redisData = {
+      const redisData = { 
           ...response._doc,
           token
       };
@@ -96,7 +96,4 @@ router.post("/signup", async (req,res) =>{
     res.status(200).json({ message: 'Token is valid', user: req.user });
 });
 
-//comment added for testing purpose for git hub
-
-
-  module.exports = router;
+module.exports = router;
