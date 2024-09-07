@@ -5,32 +5,23 @@ const {jwtAuthMiddleware, generateToken} = require("./../jwt");
 const jwt = require('jsonwebtoken');
 const { setValue, getValue } = require('../redisClient');
 
-router.post('/api/topics',async(req,res) =>{
+router.post('/api/topics',jwtAuthMiddleware,async(req,res) =>{
     try{
         const data = req.body;
         const newTopic = new Topic(data);
         const response = await newTopic.save();
 
          console.log("course saved successfully");
-
-         const payload = {
-            id: response.id,
-         }
-         console.log(JSON.stringify(payload));
-         const token = generateToken(response.id);
      
          const redisData = { 
              ...response._doc,
-             token
          };
          await setValue(`user:${response.id}`, redisData);      
          
-         console.log("Token is :",token);
          res.status(200).json({
             status: 200,
             message: "Topic saved successfully",
             data: response,
-            token: token
             })
 
     }catch(err){

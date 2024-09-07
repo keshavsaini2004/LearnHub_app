@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Course = require("./../models/course");
+const Topic = require("./../models/topic");
 const {jwtAuthMiddleware, generateToken} = require("./../jwt");
 const jwt = require('jsonwebtoken');
 const { setValue, getValue } = require('../redisClient');
@@ -15,19 +16,12 @@ router.post('/api/courses',jwtAuthMiddleware,async(req,res) =>{
 
     console.log("Course saved successfully");
 
-    // const payload = {
-    //     id: response.id,
-    // }
-    //     console.log(JSON.stringify(payload));
-    //     const token = generateToken(response.id);
-
         const redisData = { 
             ...response._doc,
-            // token
+        
         };
         await setValue(`user:${response.id}`, redisData);
-
-    // console.log("Token is :",token );
+        
         res.status(200).json({
         status: 200,
         message: "Course saved successfully",
@@ -132,8 +126,34 @@ router.delete('/delete/course/:courseId',jwtAuthMiddleware, async(req,res) =>{
             error: err.message,
         })
     }
-
 })
+router.get('/courses-with-topics', async (req, res) => {
+    try {
+      const courseList = await Course.find({}, '_id title'); // Fetch only _id and title fields from the Course collection
+      
+      let data = [];
+  
+      for (let i = 0; i < courseList.length; i++) {
+        let courseId = courseList[i]._id.toString();
+        let courseTitle = courseList[i].title;
+        let topics = await Topic.find({ courseId: courseId }, '_id');
+        let topicIds = topics.map(topic => topic._id.toString());
+  
+        const courseObj = {
+          courseId: courseId,
+          courseTitle: courseTitle,
+          topicIds: topicIds
+        };
+
+        data.push(courseObj);
+      }
+      res.json(data);
+
+    } catch (err) {
+      console.error('Error fetching courses and topics:', err);
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  });
 
 
-module.exports =  router ;
+module.exports = router ;

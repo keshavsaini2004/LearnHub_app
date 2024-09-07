@@ -1,0 +1,57 @@
+_id	title
+66cc0d3314a257e1e67cba32	react js 
+66cf00640e39011b06f1d61d	node.js 
+66cf00c70e39011b06f1d61f	react.js 
+66cf00d50e39011b06f1d621	react.js 
+66d33ca62cb3f3933b606483	Node.js Basics
+66d34075140a227740c4dfcb	Node.js Basics
+
+
+[
+    {
+        "66cf00640e39011b06f1d61d" : "react js ",
+        "topicIds" : [
+            "66cc0d939893cd7152083b5f",
+            "66cc0d939893cd7152083b5f",
+            "66cc0d939893cd7152083b5f"
+        ]
+    },
+    {
+        "66cf00640e39011b06f1d61d" : "react js ",
+        "topicIds" : [
+            "66cc0d939893cd7152083b5f",
+            "66cc0d939893cd7152083b5f",
+            "66cc0d939893cd7152083b5f"
+        ]
+    }
+]
+
+process: 
+# 1: const courseList =  select id, title from courses colelction,
+# _id	title
+# 66cc0d3314a257e1e67cba32	react js 
+# 66cf00640e39011b06f1d61d	node.js 
+# 66cf00c70e39011b06f1d61f	react.js 
+# 66cf00d50e39011b06f1d621	react.js 
+# 66d33ca62cb3f3933b606483	Node.js Basics
+# 66d34075140a227740c4dfcb	Node.js Basics
+
+let data  =  [];
+2: loop courseid 
+for(i=0; i<courseList.length; i++){
+   let courseId = i.course_id;
+   let course_tilte = i.course_title;
+
+#   cont topicList // cquery 
+# javascript function ot get topcis id only
+   const course  =  {
+        "66cf00640e39011b06f1d61d" : "react js ",
+        "topicIds" : [
+            "66cc0d939893cd7152083b5f",
+            "66cc0d939893cd7152083b5f",
+            "66cc0d939893cd7152083b5f"
+        ]
+    }
+
+    # -put course object to data array ojbect and return to the api
+}

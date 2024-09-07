@@ -23,6 +23,10 @@ const courseSchema = new mongoose.Schema({
         enum : ['active','inactive'],
         default : 'inactive'
     },   
+    topics: [{
+         type: mongoose.Schema.Types.ObjectId,
+         ref: 'Topic'
+         }] 
 },
 {
     timestamps: { 
