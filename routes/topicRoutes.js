@@ -11,7 +11,7 @@ router.post('/api/topics',jwtAuthMiddleware,async(req,res) =>{
         const newTopic = new Topic(data);
         const response = await newTopic.save();
 
-         console.log("course saved successfully");
+         console.log("topic saved successfully");
      
          const redisData = { 
              ...response._doc,

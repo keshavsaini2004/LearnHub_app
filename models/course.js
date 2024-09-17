@@ -14,6 +14,10 @@ const courseSchema = new mongoose.Schema({
         type: String,
         required : true
     },
+    amount:{
+        type: Number,
+        required : true
+    },
     totaltopic:{
         type: Number,
         required : true
@@ -21,8 +25,12 @@ const courseSchema = new mongoose.Schema({
     status :{
         type: String,
         enum : ['active','inactive'],
-        default : 'inactive'
-    },   
+        default : 'active'
+    },  
+    price:{
+        type: Number,
+        required : true
+    },
     topics: [{
          type: mongoose.Schema.Types.ObjectId,
          ref: 'Topic'

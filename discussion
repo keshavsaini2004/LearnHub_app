@@ -55,3 +55,18 @@ for(i=0; i<courseList.length; i++){
 
     # -put course object to data array ojbect and return to the api
 }
+{
+    "status": 200,
+    "message": "kart retrieved successfully",
+    "kartData": [
+        {
+            "course": [],
+            "_id": "66e12b28b8fddcb4359ee2bc",
+            "courseId": "66d57a3472f2ce65ea5938b2",
+            "userId": "66a5e2eb44c4a1b681c9399e",
+            "paymentStatus": "unpaid",
+            "courseAmount" : "3500"
+            "__v": 0
+        }
+    ]
+}
