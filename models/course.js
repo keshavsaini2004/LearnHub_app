@@ -14,10 +14,6 @@ const courseSchema = new mongoose.Schema({
         type: String,
         required : true
     },
-    amount:{
-        type: Number,
-        required : true
-    },
     totaltopic:{
         type: Number,
         required : true
@@ -31,10 +27,10 @@ const courseSchema = new mongoose.Schema({
         type: Number,
         required : true
     },
-    topics: [{
-         type: mongoose.Schema.Types.ObjectId,
-         ref: 'Topic'
-         }] 
+    // topics: [{
+    //      type: mongoose.Schema.Types.ObjectId,
+    //      ref: 'Topic'
+    //      }] 
 },
 {
     timestamps: { 

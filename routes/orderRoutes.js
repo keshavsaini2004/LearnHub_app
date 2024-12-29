@@ -2,13 +2,39 @@ const express = require("express");
 const router = express.Router();
 const Order = require("./../models/order");
 const Course = require("./../models/course");
+const cart = require("./../models/cart");
 const {jwtAuthMiddleware, generateToken} = require("../jwt");
 const jwt = require('jsonwebtoken');
+const AuthService = require("../services/authService"); // Import the instance
 
-router.post('/api/order',async(req,res)=>{
+router.post('/api/order',jwtAuthMiddleware,async(req,res)=>{
     try{
-        const data = req.body;
-        const newOrder = new Order(data);
+      const userId = await AuthService.getUserIdFromToken(req.headers.authorization);
+
+      const data  = req.body;
+      let cartId = data.cartId;
+
+      let cartData = await cart.findOne({
+        _id: cartId
+      });
+
+      if (!cartData) {
+        return res.status(404).json({
+          status: 404,
+          message: "Cart not found",
+        });
+      }
+
+      let courseId = cartData.courseId;
+      
+      const newJson = {
+        "courseId": courseId,
+        "userId": userId,
+        "cartId": cartId,
+        "paymentId": "unpaid"
+      }
+
+        const newOrder = new Order(newJson);
         const response = await newOrder.save();
 
         res.status(200).json({

@@ -8,7 +8,7 @@ const { setValue, getValue } = require('../redisClient');
 
 
 // Create a new course 
-router.post('/api/courses',jwtAuthMiddleware,async(req,res) =>{
+router.post('/api/courses',async(req,res) =>{
   try{
     const data = req.body;
     const newCourse = new Course(data);

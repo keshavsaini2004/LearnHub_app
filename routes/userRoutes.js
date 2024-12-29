@@ -9,27 +9,44 @@ const { setValue, getValue } = require('../redisClient');
 
 router.post("/signup", async (req,res) =>{
     try{
-      const data = req.body //Assuming the request body contains the user data  
-      const newUser = new User(data);// creating the new user document using the mongoose model
-      const response = await newUser.save();// saving the new user document to the database
+      const data = req.body;
       
-      console.log("data saved successfully");
+      const generateUsername = (name) => {
+        const cleanedName = name.replace(/\s+/g, '').toLowerCase(); 
+        const randomNumber = Math.floor(Math.random() * 9000) + 1000; 
+        return `${cleanedName}_${randomNumber}`; 
+      };
+      
+      const username = generateUsername(data.name);
+
+      const insertJson = {
+        name: data.name,
+        username: username,
+        age: data.age,
+        mobile: data.mobile,
+        email: data.email,
+        password: data.password,
+        user_type: data.user_type
+      };
+      
+      const newUser = new User(insertJson);
+      const response = await newUser.save();
+
 
       const payload = {
-        id: response.id,
-        email: response.email,  
+        user_id: response._id,
+        email: response.email,   
       };
-      console.log(JSON.stringify(payload));
-      const token = generateToken(response.email);
+      const token = generateToken(payload);
+     
 
       const redisData = { 
           ...response._doc,
           token
       };
       await setValue(`user:${response.id}`, redisData);
-
-      console.log("Token is :",token );
         res.status(200).json({
+        success:true,
         status: 200,
         message: "Data saved successfully",
         data: response,
@@ -38,6 +55,7 @@ router.post("/signup", async (req,res) =>{
     }catch (err) {
       console.error("Error saving data:", err);
       res.status(500).json({
+        success:false,
         status: 500,
         message: "Internal Server Error",
         error: err.message,
@@ -61,17 +79,22 @@ router.post("/signup", async (req,res) =>{
       }
         // generate Token
       const payload = {
-        id: user.id,
+        user_id: user._id,
         email: user.email,
       };
       
       const token = generateToken(payload);
 
       // return token as response
-      res.json({ token });
+      res.json({
+        success:true,
+        token : token,
+        message: "login success",
+        user_type:user.user_type ? user.user_type : 'user'
+      });
     }catch(err){
         console.error(err);
-        res.status(500).json({ error: "Internal Server Error" });
+        res.status(500).json({success:false, message: "Internal Server Error" });
     }
   })
 

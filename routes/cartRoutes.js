@@ -3,11 +3,23 @@ const router = express.Router();
 const Cart = require("./../models/cart");
 const {jwtAuthMiddleware, generateToken} = require("../jwt");
 const jwt = require('jsonwebtoken');
+const AuthService = require("../services/authService"); // Import the instance
 
 router.post('/api/cart', jwtAuthMiddleware,async(req,res)=>{
     try{
-    const data  = req.body;
-    const newCart = new Cart(data);
+
+        const userId = await AuthService.getUserIdFromToken(req.headers.authorization);
+            
+        const data  = req.body;
+        let courseId = data.courseId;
+
+        const newJson = {
+            "courseId": courseId,
+            "userId": userId,
+        "paymentStatus": "unpaid"
+        }
+
+    const newCart = new Cart(newJson);
     const response  = await newCart.save();
     
     res.status(200).json({
@@ -19,9 +31,9 @@ router.post('/api/cart', jwtAuthMiddleware,async(req,res)=>{
     }catch(err){
         console.error("Error saving data:", err);
         res.status(500).json({
-          status: 500,
-          message: "Internal Server Error",
-          error: err.message,
+        status: 500,
+        message: "Internal Server Error",
+        error: err.message,
         });
     }
 })
